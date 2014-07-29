@@ -1,0 +1,14 @@
+# BEGIN WordPress
+CosignProtected On
+AuthType Cosign
+
+<Files ~ (\.pl)>
+Options ExecCGI FollowSymLinks
+</Files>
+Options +FollowSymLinks +SymLinksIfOwnerMatch
+RewriteEngine On
+RewriteBase /PGCert/
+RewriteCond %{HTTP_HOST} ^(www.)?scottish-culture-distance-learning.celtscot.ed.ac.uk/PGCert$
+RewriteRule ^(/)?$ PGCert [L]
+
+# END WordPress
