@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo 'OK';
       } else {
         $list .= "$uun\n";
-        echo 'ERROR';
+        echo $user->get_error_message();
       }
     } else {
       echo 'Already exists';
