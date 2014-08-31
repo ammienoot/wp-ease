@@ -335,7 +335,7 @@ function widget_displayEASE($args)
  
 function EASE_init()
 {
-  register_sidebar_widget(__('EASE_widget'), 'widget_displayEASE');
+  wp_register_sidebar_widget ( 'ease_widget', __('EASE_widget'), 'widget_displayEASE' );
 }
 add_action("plugins_loaded", "EASE_init");
 
