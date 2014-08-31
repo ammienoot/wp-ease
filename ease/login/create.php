@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   foreach ($uuns as $uun) {
     echo "&nbsp;&nbsp;&nbsp;--&gt;&nbsp;create account for $uun...&nbsp;";
 
-    $user = get_userdatabylogin($uun);
+    $user = get_user_by( 'login', $uun );
     if (! $user) {
       $user = $ease_authentication_plugin->_create_user($uun);
       if ($user && ! is_wp_error($user)) {

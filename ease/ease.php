@@ -131,7 +131,7 @@ class EASEAuthenticationPlugin {
     }
 
     // Create new users automatically, if configured
-    $user = get_userdatabylogin($username);
+    $user = get_user_by( 'login', $username );
     if (! $user) {
       if ((bool) $this->get_plugin_option('auto_create_user')) {
         $user = $this->_create_user($username);
