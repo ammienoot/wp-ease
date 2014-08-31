@@ -12,7 +12,6 @@
 <?php
 
 require_once( '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'wp-config.php' );
-require_once( '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 
 $list = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
