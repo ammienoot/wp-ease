@@ -2,8 +2,10 @@
 
 require_once( '../../../../wp-config.php' );
 
+$secret  = '';
 $options = get_option('ease_authentication_options');
-$secret = $options['secret'];
+if ( ($options !== false) && array_key_exists('secret', $options) )
+  $secret  = $options['secret'];
 
 $redirect_to = site_url() . DIRECTORY_SEPARATOR;
 $url = "{$redirect_to}wp-login.php";
