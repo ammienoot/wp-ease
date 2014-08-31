@@ -13,8 +13,8 @@ class EASEAuthenticationOptionsPage {
     $this->page = $page;
     $this->title = $title;
 
-    add_action('admin_init', array(&$this, 'register_options'));
-    add_action('admin_menu', array(&$this, 'add_options_page'));
+    add_action('admin_init', array($this, 'register_options'));
+    add_action('admin_menu', array($this, 'add_options_page'));
 
   }
 
@@ -26,9 +26,9 @@ class EASEAuthenticationOptionsPage {
     register_setting($this->group, $this->group);
 
     $section = 'ease_authentication_main';
-    add_settings_section($section, 'Main Options', array(&$this, '_display_options_section'), $this->page);
-    add_settings_field('ease_authenticate_site_on', 'Level of authentication?', array(&$this, '_display_option_ease_authenticate_site'), $this->page, $section);
-    add_settings_field('ease_authentication_secret', 'Shared secret', array(&$this, '_display_option_secret'), $this->page, $section);
+    add_settings_section($section, 'Main Options', array($this, '_display_options_section'), $this->page);
+    add_settings_field('ease_authenticate_site_on', 'Level of authentication?', array($this, '_display_option_ease_authenticate_site'), $this->page, $section);
+    add_settings_field('ease_authentication_secret', 'Shared secret', array($this, '_display_option_secret'), $this->page, $section);
 
   }
 
@@ -38,11 +38,11 @@ class EASEAuthenticationOptionsPage {
   function add_options_page() {
 
     if (function_exists('is_site_admin') && is_site_admin()) {
-      add_submenu_page('wpmu-admin.php', $this->title, $this->title, 'manage_options', $this->page, array(&$this, '_display_options_page'));
-      add_options_page($this->title, $this->title, 'manage_options', $this->page, array(&$this, '_display_options_page'));
+      add_submenu_page('wpmu-admin.php', $this->title, $this->title, 'manage_options', $this->page, array($this, '_display_options_page'));
+      add_options_page($this->title, $this->title, 'manage_options', $this->page, array($this, '_display_options_page'));
     }
     else {
-      add_options_page($this->title, $this->title, 'manage_options', $this->page, array(&$this, '_display_options_page'));
+      add_options_page($this->title, $this->title, 'manage_options', $this->page, array($this, '_display_options_page'));
     }
 
   }
