@@ -272,7 +272,6 @@ function EASE_widget()
   $options_all = get_option('ease_authentication_options');
   if ( ($options_all !== false) && array_key_exists('ease_authenticate_site_on', $options_all) )
     $full_EASE = $options_all['ease_authenticate_site_on'];
-	$domain = get_option('siteurl');
 	
 	if ($full_EASE == 'on')
 	{
@@ -285,7 +284,7 @@ function EASE_widget()
 var t = setTimeout("document.autoEASE.submit();",0);
 </script>
 <p id="login-text">                        
-<form name="autoEASE" action="<?php echo  $domain.'/wp-content/plugins/ease/login' ?>" method="get" style="margin: 0px; padding: 0px;">
+<form name="autoEASE" action="<?php echo  plugins_url('login', __FILE__) ?>" method="get" style="margin: 0px; padding: 0px;">
 	<input type="hidden" name="Login with EASE" id="login" alt="Login with EASE" title="Login to Wordpress with your EASE username and password"/>
 </form>
 
@@ -299,8 +298,8 @@ var t = setTimeout("document.autoEASE.submit();",0);
 		//do_action( 'bp_before_sidebar_login_form' )
 ?>	
 <p id="login-text">                        
-<form action="<?php echo  $domain.'/wp-content/plugins/ease/login' ?>" method="get" style="margin: 0px; padding: 0px;">
-	<input type="image" name="Login with EASE" id="login" alt="Login with EASE" src="<?php echo  $domain.'/wp-content/plugins/ease/loginButton.png' ?>" title="Login to Wordpress with your EASE username and password"  style="margin-top:.5em;"/>
+<form action="<?php echo  plugins_url('login', __FILE__) ?>" method="get" style="margin: 0px; padding: 0px;">
+	<input type="image" name="Login with EASE" id="login" alt="Login with EASE" src="<?php echo  plugins_url('loginButton.png', __FILE__) ?>" title="Login to Wordpress with your EASE username and password"  style="margin-top:.5em;"/>
 </form>
 </p>		
 		
@@ -309,7 +308,7 @@ var t = setTimeout("document.autoEASE.submit();",0);
 	else
 	{
 ?>
-<a class="button logout" href="<?php echo wp_logout_url( $domain.'/wp-content/plugins/ease/logout.pl' ) ?>"><?php _e( 'Log Out', 'buddypress' ) ?></a>
+<a class="button logout" href="<?php echo wp_logout_url( plugins_url('logout.pl', __FILE__) ) ?>"><?php _e( 'Log Out' ) ?></a>
 <?php	
 	}
 }
