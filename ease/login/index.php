@@ -14,6 +14,6 @@ $username = $_SERVER['REMOTE_USER'];
 $now = time();
 $mac = ease_authentication_getMAC($username . $now, $secret);
 
-header("Location: $url?userid=$username&timestamp=$now&mac=$mac&redirect_to=$redirect_to");
+header("Location: {$url}?userid={$username}&timestamp={$now}&mac={$mac}&redirect_to={$redirect_to}");
 
 ?>
