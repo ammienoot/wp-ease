@@ -158,7 +158,7 @@ class EASEAuthenticationPlugin {
    */
   function _create_user($username) {
 
-    $user = new WP_Error('', '');
+    $user = new WP_Error('user not found', 'Cannot find user\'s information');
     include_once( ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php' );
 
     $ldapServer = $this->get_plugin_option('ldap_server');
