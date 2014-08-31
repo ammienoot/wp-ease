@@ -152,6 +152,9 @@ class EASEAuthenticationPlugin {
 
   /*
    * Create a new WordPress account for the specified username.
+   * Returns: A WP_User object for the newly-created user
+   *          or, A WP_Error if wp_insert_user() fails (e.g. email address already associated with existing account)
+   *          or, 'false' if get_user_by('id') fails for the newly-created user (unlikely)
    */
   function _create_user($username) {
 
@@ -197,8 +200,21 @@ class EASEAuthenticationPlugin {
             $userdata = compact('user_login', 'user_pass', 'first_name', 'last_name', 'user_email', 'display_name');
 
             $user_id = wp_insert_user($userdata);
-            $user = get_user_by('id', $user_id);
-
+            
+            /* Catch any errors we might encounter when trying to create a user account
+             *  (such as the user email already being associated with an existing account
+             *   ... which might save a bit of debugging time ...)
+             */
+            if ( is_wp_error($user_id) ) {
+              // Return the error.
+              $user = $user_id;
+            } else {
+              // Get the user
+              $user = get_user_by('id', $user_id);
+            }
+            
+            // Eoghan: Turn off the admin bar for created users by default.
+            update_user_meta( $user_id, 'show_admin_bar_front', false );
           }
 
         }
