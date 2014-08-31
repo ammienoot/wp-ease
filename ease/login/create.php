@@ -15,7 +15,7 @@ require_once( '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . D
 
 $list = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $uuns = preg_split("/\s+/", $_POST['uuns']);
+  $uuns = preg_split("/[\s,]+/", $_POST['uuns']);
   foreach ($uuns as $uun) {
     echo "&nbsp;&nbsp;&nbsp;--&gt;&nbsp;create account for $uun...&nbsp;";
 
