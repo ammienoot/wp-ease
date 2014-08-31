@@ -267,8 +267,11 @@ function wp_authenticate_ease($user, $username, $password) {
 //Display EASE login button if not logged in, and Log-out button if logged in.
 function EASE_widget() 
 {	
-	$options_all = get_option('ease_authentication_options');
-	$full_EASE = $options_all['ease_authenticate_site_on'];
+  $full_EASE = 'off';
+
+  $options_all = get_option('ease_authentication_options');
+  if ( ($options_all !== false) && array_key_exists('ease_authenticate_site_on', $options_all) )
+    $full_EASE = $options_all['ease_authenticate_site_on'];
 	$domain = get_option('siteurl');
 	
 	if ($full_EASE == 'on')
