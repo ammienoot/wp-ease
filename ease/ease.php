@@ -159,7 +159,7 @@ class EASEAuthenticationPlugin {
   function _create_user($username) {
 
     $user = new WP_Error('', '');
-    include_once(WPINC . DIRECTORY_SEPARATOR . 'registration.php');
+    include_once( ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php' );
 
     $ldapServer = $this->get_plugin_option('ldap_server');
     $ldapBase = $this->get_plugin_option('ldap_base');
