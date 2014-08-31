@@ -89,13 +89,18 @@ class EASEAuthenticationPlugin {
 
   /*
    * Get the value of the specified plugin-specific option.
+   * Return: The value of $option in ease_authentication_options
+   *         or, an empty string, if the option wasn't found
    */
   function get_plugin_option($option) {
-
+    $return_val = ''; // Return this if $option doesn't exist.
+	
     $options = get_option('ease_authentication_options');
+    
+    if ( ($options !== false) && array_key_exists($option, $options) )
+        $return_val = $options[$option];
 
-    return $options[$option];
-
+    return $return_val;
   }
 
   /*
