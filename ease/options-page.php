@@ -31,6 +31,7 @@ class EASEAuthenticationOptionsPage {
     add_settings_field('ease_authentication_secret', 'Shared secret', array($this, '_display_option_secret'), $this->page, $section);
     //add_settings_field('ease_authentication_use_remote_user', 'Use REMOTE_USER?', array($this, '_display_option_use_remote_user'), $this->page, $section);
     add_settings_field('ease_authentication_auto_create_user', 'Automatically create user accounts?', array($this, '_display_option_auto_create_user'), $this->page, $section);
+    add_settings_field('ease_authentication_show_toolbar_create_user', 'Show Toolbar for created user accounts?', array($this, '_display_option_show_toolbar_create_user'), $this->page, $section);
     add_settings_field('ease_authentication_ldap_server', 'URL of LDAP server', array($this, '_display_option_ldap_server'), $this->page, $section);
     add_settings_field('ease_authentication_ldap_base', 'Base DN for the LDAP directory', array($this, '_display_option_ldap_base'), $this->page, $section);
   }
@@ -134,6 +135,19 @@ This variable is automatically set by EASE if the folder is protected by cosign.
 <input type="checkbox" name="<?php echo htmlspecialchars($this->group); ?>[auto_create_user]" id="ease_authentication_auto_create_user"<?php if ($auto_create_user) echo ' checked="checked"' ?> value="1" /><br />
 Should a new user be created automatically if not already in the WordPress database?<br />
 Created users will given the default role as defined in the system options.
+<?php
+
+  }
+
+  /*
+   * Display the show toolbar when creating accounts checkbox.
+   */
+  function _display_option_show_toolbar_create_user() {
+
+    $show_toolbar_create_user = $this->plugin->get_plugin_option('show_toolbar_create_user');
+?>
+<input type="checkbox" name="<?php echo htmlspecialchars($this->group); ?>[show_toolbar_create_user]" id="ease_authentication_show_toolbar_create_user"<?php if ($show_toolbar_create_user) echo ' checked="checked"' ?> value="1" /><br />
+When a new user is created automatically, do you want them to see the WordPress Toolbar at the top of each page?
 <?php
 
   }

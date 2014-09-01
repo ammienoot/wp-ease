@@ -39,6 +39,7 @@ class EASEAuthenticationPlugin {
       'secret' => '',
       'use_remote_user' => true,
       'auto_create_user' => false,
+      'show_toolbar_create_user' => false,
       'ldap_server' => 'ldaps://authorise.is.ed.ac.uk',
       'ldap_base' => 'ou=people,ou=central,dc=authorise,dc=ed,dc=ac,dc=uk'
     );
@@ -211,10 +212,14 @@ class EASEAuthenticationPlugin {
             } else {
               // Get the user
               $user = get_user_by('id', $user_id);
+
+              /* Show the WordPress Toolbar for the new user (or turn it off, depending on setting) */
+              if ( (bool) $this->get_plugin_option( 'show_toolbar_create_user' ) )
+                update_user_option( $user_id, 'show_admin_bar_front', 'true' );
+              else
+                update_user_option( $user_id, 'show_admin_bar_front', 'false' );
             }
             
-            // Eoghan: Turn off the admin bar for created users by default.
-            update_user_meta( $user_id, 'show_admin_bar_front', false );
           }
 
         }
