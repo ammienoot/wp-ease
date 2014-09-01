@@ -214,10 +214,8 @@ class EASEAuthenticationPlugin {
               $user = get_user_by('id', $user_id);
 
               /* Show the WordPress Toolbar for the new user (or turn it off, depending on setting) */
-              if ( (bool) $this->get_plugin_option( 'show_toolbar_create_user' ) )
-                update_user_option( $user_id, 'show_admin_bar_front', 'true' );
-              else
-                update_user_option( $user_id, 'show_admin_bar_front', 'false' );
+              $show_toolbar = ( (bool) $this->get_plugin_option( 'show_toolbar_create_user' ) ? 'true' : 'false' );
+              update_user_option( $user_id, 'show_admin_bar_front', $show_toolbar );
             }
             
           }
