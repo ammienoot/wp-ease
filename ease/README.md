@@ -14,8 +14,7 @@ The logout Perl script is picky about directory and file permissions:
 Bulk creating new accounts
 ---------------------
 
-You can bulk create user accounts by visiting:
-- {wp install dir}/wp-content/plugins/ease/login/create.php
+You can bulk create user accounts from a list of UUNs. Follow the weblink at the bottom of the 'EASE authentication' settings page to use the service.
 
 You can enter a list of UUNs in the 'UUNs' field, either:
 - a comma-delimited list of UUNs
