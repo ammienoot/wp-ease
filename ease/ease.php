@@ -39,7 +39,7 @@ class EASEAuthenticationPlugin {
       'secret' => '',
       'use_remote_user' => true,
       'auto_create_user' => false,
-      'show_toolbar_create_user' => false,
+      'show_toolbar_create_user' => true,
       'ldap_server' => 'ldaps://authorise.is.ed.ac.uk',
       'ldap_base' => 'ou=people,ou=central,dc=authorise,dc=ed,dc=ac,dc=uk'
     );
