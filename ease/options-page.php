@@ -54,7 +54,8 @@ class EASEAuthenticationOptionsPage {
    * Display the options for this plugin.
    */
   function _display_options_page() {
-
+    $bulk_create_url = plugins_url('login/create.php', __FILE__);
+    
 ?>
 <div class="wrap">
 <?php screen_icon(); ?>
@@ -66,6 +67,10 @@ class EASEAuthenticationOptionsPage {
       <input type="submit" name="Submit" value="<?php esc_attr_e('Save changes'); ?>" class="button-primary" />
     </p>
   </form>
+  <p>
+    <strong>Bulk create accounts:</strong> Create accounts from a list of UUNs on the
+    <a href="<?php echo($bulk_create_url); ?>">bulk create accounts</a> page.
+  </p>
 </div>
 <?php
 
