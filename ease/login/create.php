@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 }
 
+$ease_settings_page_url = admin_url();
+
 ?>
 
 <form action="" method="POST">
@@ -48,6 +50,7 @@ UUNS:<br />
 <p>
 <input type="submit" value="Create accounts" />
 </p>
+<p>Return to the <a href="<?php echo($ease_settings_page_url); ?>">Dashboard</a>.</p>
 </form>
 </body>
 </html>
