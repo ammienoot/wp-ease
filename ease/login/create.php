@@ -39,8 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <form action="" method="POST">
 <p>
+  Enter a list of UUNs in the box below, separated by commas, spaces, or on separate lines.
+</p>
+<p>
 UUNS:<br />
-<textarea name="uuns" rows="10" cols="20"><?php echo $list; ?></textarea>
+<textarea name="uuns" rows="10" cols="50"><?php echo $list; ?></textarea>
 </p>
 <p>
 <input type="submit" value="Create accounts" />
