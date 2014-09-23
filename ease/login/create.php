@@ -12,22 +12,21 @@
 <?php
 
 require_once( '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'wp-config.php' );
-require_once( '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 
 $list = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $uuns = preg_split("/\s+/", $_POST['uuns']);
+  $uuns = preg_split("/[\s,]+/", $_POST['uuns']);
   foreach ($uuns as $uun) {
     echo "&nbsp;&nbsp;&nbsp;--&gt;&nbsp;create account for $uun...&nbsp;";
 
-    $user = get_userdatabylogin($uun);
+    $user = get_user_by( 'login', $uun );
     if (! $user) {
       $user = $ease_authentication_plugin->_create_user($uun);
       if ($user && ! is_wp_error($user)) {
         echo 'OK';
       } else {
         $list .= "$uun\n";
-        echo 'ERROR';
+        echo $user->get_error_message();
       }
     } else {
       echo 'Already exists';
@@ -36,16 +35,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 }
 
+$ease_settings_page_url = admin_url();
+
 ?>
 
 <form action="" method="POST">
 <p>
+  Enter a list of UUNs in the box below, separated by commas, spaces, or on separate lines.
+</p>
+<p>
 UUNS:<br />
-<textarea name="uuns" rows="10" cols="20"><?php echo $list; ?></textarea>
+<textarea name="uuns" rows="10" cols="50"><?php echo $list; ?></textarea>
 </p>
 <p>
 <input type="submit" value="Create accounts" />
 </p>
+<p>Return to the <a href="<?php echo($ease_settings_page_url); ?>">Dashboard</a>.</p>
 </form>
 </body>
 </html>

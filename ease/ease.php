@@ -39,6 +39,7 @@ class EASEAuthenticationPlugin {
       'secret' => '',
       'use_remote_user' => true,
       'auto_create_user' => false,
+      'show_toolbar_create_user' => true,
       'ldap_server' => 'ldaps://authorise.is.ed.ac.uk',
       'ldap_base' => 'ou=people,ou=central,dc=authorise,dc=ed,dc=ac,dc=uk'
     );
@@ -89,13 +90,18 @@ class EASEAuthenticationPlugin {
 
   /*
    * Get the value of the specified plugin-specific option.
+   * Return: The value of $option in ease_authentication_options
+   *         or, an empty string, if the option wasn't found
    */
   function get_plugin_option($option) {
-
+    $return_val = ''; // Return this if $option doesn't exist.
+	
     $options = get_option('ease_authentication_options');
+    
+    if ( ($options !== false) && array_key_exists($option, $options) )
+        $return_val = $options[$option];
 
-    return $options[$option];
-
+    return $return_val;
   }
 
   /*
@@ -131,7 +137,7 @@ class EASEAuthenticationPlugin {
     }
 
     // Create new users automatically, if configured
-    $user = get_userdatabylogin($username);
+    $user = get_user_by( 'login', $username );
     if (! $user) {
       if ((bool) $this->get_plugin_option('auto_create_user')) {
         $user = $this->_create_user($username);
@@ -147,11 +153,14 @@ class EASEAuthenticationPlugin {
 
   /*
    * Create a new WordPress account for the specified username.
+   * Returns: A WP_User object for the newly-created user
+   *          or, A WP_Error if wp_insert_user() fails (e.g. email address already associated with existing account)
+   *          or, 'false' if get_user_by('id') fails for the newly-created user (unlikely)
    */
   function _create_user($username) {
 
-    $user = new WP_Error('', '');
-    include_once(WPINC . DIRECTORY_SEPARATOR . 'registration.php');
+    $user = new WP_Error('user not found', 'Cannot find user\'s information');
+    include_once( ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php' );
 
     $ldapServer = $this->get_plugin_option('ldap_server');
     $ldapBase = $this->get_plugin_option('ldap_base');
@@ -192,8 +201,23 @@ class EASEAuthenticationPlugin {
             $userdata = compact('user_login', 'user_pass', 'first_name', 'last_name', 'user_email', 'display_name');
 
             $user_id = wp_insert_user($userdata);
-            $user = get_user_by('id', $user_id);
+            
+            /* Catch any errors we might encounter when trying to create a user account
+             *  (such as the user email already being associated with an existing account
+             *   ... which might save a bit of debugging time ...)
+             */
+            if ( is_wp_error($user_id) ) {
+              // Return the error.
+              $user = $user_id;
+            } else {
+              // Get the user
+              $user = get_user_by('id', $user_id);
 
+              /* Show the WordPress Toolbar for the new user (or turn it off, depending on setting) */
+              $show_toolbar = ( (bool) $this->get_plugin_option( 'show_toolbar_create_user' ) ? 'true' : 'false' );
+              update_user_option( $user_id, 'show_admin_bar_front', $show_toolbar );
+            }
+            
           }
 
         }
@@ -246,9 +270,11 @@ function wp_authenticate_ease($user, $username, $password) {
 //Display EASE login button if not logged in, and Log-out button if logged in.
 function EASE_widget() 
 {	
-	$options_all = get_option('ease_authentication_options');
-	$full_EASE = $options_all['ease_authenticate_site_on'];
-	$domain = get_option('siteurl');
+  $full_EASE = 'off';
+
+  $options_all = get_option('ease_authentication_options');
+  if ( ($options_all !== false) && array_key_exists('ease_authenticate_site_on', $options_all) )
+    $full_EASE = $options_all['ease_authenticate_site_on'];
 	
 	if ($full_EASE == 'on')
 	{
@@ -261,7 +287,7 @@ function EASE_widget()
 var t = setTimeout("document.autoEASE.submit();",0);
 </script>
 <p id="login-text">                        
-<form name="autoEASE" action="<?php echo  $domain.'/wp-content/plugins/ease/login' ?>" method="get" style="margin: 0px; padding: 0px;">
+<form name="autoEASE" action="<?php echo  plugins_url('login', __FILE__) ?>" method="get" style="margin: 0px; padding: 0px;">
 	<input type="hidden" name="Login with EASE" id="login" alt="Login with EASE" title="Login to Wordpress with your EASE username and password"/>
 </form>
 
@@ -275,8 +301,8 @@ var t = setTimeout("document.autoEASE.submit();",0);
 		//do_action( 'bp_before_sidebar_login_form' )
 ?>	
 <p id="login-text">                        
-<form action="<?php echo  $domain.'/wp-content/plugins/ease/login' ?>" method="get" style="margin: 0px; padding: 0px;">
-	<input type="image" name="Login with EASE" id="login" alt="Login with EASE" src="<?php echo  $domain.'/wp-content/plugins/ease/loginButton.png' ?>" title="Login to Wordpress with your EASE username and password"  style="margin-top:.5em;"/>
+<form action="<?php echo  plugins_url('login', __FILE__) ?>" method="get" style="margin: 0px; padding: 0px;">
+	<input type="image" name="Login with EASE" id="login" alt="Login with EASE" src="<?php echo  plugins_url('loginButton.png', __FILE__) ?>" title="Login to Wordpress with your EASE username and password"  style="margin-top:.5em;"/>
 </form>
 </p>		
 		
@@ -285,7 +311,7 @@ var t = setTimeout("document.autoEASE.submit();",0);
 	else
 	{
 ?>
-<a class="button logout" href="<?php echo wp_logout_url( $domain.'/wp-content/plugins/ease/logout.pl' ) ?>"><?php _e( 'Log Out', 'buddypress' ) ?></a>
+<a class="button logout" href="<?php echo wp_logout_url( plugins_url('logout.pl', __FILE__) ) ?>"><?php _e( 'Log Out' ) ?></a>
 <?php	
 	}
 }
@@ -312,7 +338,7 @@ function widget_displayEASE($args)
  
 function EASE_init()
 {
-  register_sidebar_widget(__('EASE_widget'), 'widget_displayEASE');
+  wp_register_sidebar_widget ( 'ease_widget', __('EASE_widget'), 'widget_displayEASE' );
 }
 add_action("plugins_loaded", "EASE_init");
 
